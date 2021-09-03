@@ -21,9 +21,4 @@ public class Document {
 
     @Column(name = "amount")
     private BigDecimal amount;
-
-    public Document(String title, BigDecimal amount) {
-        this.title = title;
-        this.amount = amount;
-    }
 }

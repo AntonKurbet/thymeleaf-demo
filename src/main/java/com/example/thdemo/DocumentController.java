@@ -14,9 +14,13 @@ public class DocumentController {
 
     private final DocumentService documentService;
 
-    @ModelAttribute("documents")
-    public List<SelectableDocument> getdocuments() {
-        return documentService.getAll().stream().map(this::toSelectableDocument).collect(Collectors.toList());
+    @ModelAttribute("wrapper")
+    public DocumentList getDocuments() {
+        DocumentList data = new DocumentList();
+        ArrayList<SelectableDocument> arr = new ArrayList<>();
+        documentService.getAll().stream().forEach(e -> arr.add(toSelectableDocument(e)));
+        data.setDocumentList(arr);
+        return data;
     }
 
     public DocumentController(DocumentService documentService) {
@@ -24,39 +28,17 @@ public class DocumentController {
     }
 
     @PostMapping("/process")
-    public String processDocuments(@ModelAttribute(value="documents") List<SelectableDocument> data) {
-        System.out.println(data);
+    public String processDocuments(@ModelAttribute("wrapper") DocumentList data) {
+        for (SelectableDocument d : data.getDocumentList()) System.out.println(d.isSelected());
         return "index.html";
     }
 
     @GetMapping("/all")
-    public String getAllDocuments(Model model) {
-        List<SelectableDocument> data = documentService.getAll().stream().map(this::toSelectableDocument).collect(Collectors.toList());
-        model.addAttribute("documents", data);
+    public String getAllDocuments() {
         return "index.html";
     }
 
     private SelectableDocument toSelectableDocument(Document document) {
         return new SelectableDocument(document);
     }
-//
-//    @GetMapping
-//    public List<Document> getAll() {
-//        return documentService.getAll();
-//    }
-//
-//    @GetMapping("/{id}")
-//    public Document getById(@PathVariable Long id) {
-//        return documentService.getById(id).orElse(new Document("no-doc", BigDecimal.ZERO));
-//    }
-//
-//    @PostMapping
-//    public Document add(@RequestBody Document document) {
-//        return documentService.add(document);
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public void delete(@PathVariable Long id) {
-//        documentService.delete(id);
-//    }
 }

@@ -9,32 +9,38 @@
 <body>
 <div class="container">
     <h1>document table</h1>
-    <div class="row">
-        <table id="documentTable" class="table">
-            <thead>
-            <tr>
-                <th></th>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Price</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="document, rowStat: ${documents}"
-                th:style="${rowStat.odd} ? 'color: gray' : 'color: blue;'">
-                <td>
-                    <input type="checkbox" th:checked="${document.selected}" />
-                </td>
-                <td th:text="${document.id}"></td>
-                <td th:text="${document.title}"></td>
-                <td th:text="${document.amount}"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div>
-        <form action="#" th:action="@{/documents/process}" th:object="${documents}" method="post">
-            <button name="userAction" value="process">Process</button>
-        </form>
-    </div>
+    <form action="#" th:action="@{/documents/process}" th:object="${wrapper}" method="post">
+        <div class="row">
+            <table id="documentTable" class="table">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <div th:with="documents=${wrapper.documentList}">
+                    <tr th:each="document, rowStat: ${documents}"
+                        th:style="${rowStat.odd} ? 'color: gray' : 'color: blue;'">
+                        <td th:text="${rowStat.index}"></td>
+                        <td>
+                            <input type="checkbox" th:name="${document.id}" th:field="*{documentList[__${rowStat.index}__].selected}" th:value="${document.selected}"/>
+<!--                            <input type="checkbox" th:name="${document.id}" th:field="${documents[__${rowStat.index}__].selected}" />-->
+                        </td>
+                        <td th:text="${document.id}"></td>
+                        <td th:text="${document.title}"></td>
+                        <td th:text="${document.amount}"></td>
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+
+
+        <button name="userAction" value="process">Process</button>
+    </form>
+
 </div>
