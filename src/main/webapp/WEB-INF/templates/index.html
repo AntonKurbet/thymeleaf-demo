@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thymeleaf Variables</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+<div class="container">
+    <h1>document table</h1>
+    <div class="row">
+        <table id="documentTable" class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="document, rowStat: ${documents}"
+                th:style="${rowStat.odd} ? 'color: gray' : 'color: blue;'">
+                <td>
+                    <input type="checkbox" th:checked="${document.selected}" />
+                </td>
+                <td th:text="${document.id}"></td>
+                <td th:text="${document.title}"></td>
+                <td th:text="${document.amount}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <form action="#" th:action="@{/documents/process}" th:object="${documents}" method="post">
+            <button name="userAction" value="process">Process</button>
+        </form>
+    </div>
+</div>
